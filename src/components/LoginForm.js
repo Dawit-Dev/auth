@@ -1,19 +1,25 @@
-import React from 'react'
-import { Text, View } from 'react-native'
-import { Button, Card, CardSection } from './common'
+import React from "react";
+import { Button, Card, CardSection, Input } from "./common";
 
 const LoginForm = () => {
+  state = { email: "" };
+
   return (
     <Card>
+      <CardSection>
+        <Input
+          onChangeText={(email) => this.setstate({ email })}
+          value={this.state.email}
+          label="Email"
+          placeholder="user@gmail.com"
+        />
+      </CardSection>
       <CardSection />
-      <CardSection />
-          <CardSection>
-              <Button>
-                  Log In
-              </Button>
+      <CardSection>
+        <Button>Log In</Button>
       </CardSection>
     </Card>
   );
-}
+};
 
-export default LoginForm
+export default LoginForm;
