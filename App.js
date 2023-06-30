@@ -1,13 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { View } from "react-native";
 import { Header } from "./src/components/common";
+import LoginForm from "./src/components/LoginForm";
 
 export default function App() {
   return (
     <View>
       <Header headerText="Authentication" />
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <LoginForm />
+       <StatusBar style="auto" />
     </View>
   );
 }
