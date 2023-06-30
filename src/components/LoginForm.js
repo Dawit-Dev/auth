@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, CardSection, Input } from "./common";
 
 const LoginForm = () => {
-  state = { email: "" };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <Card>
       <CardSection>
         <Input
-          onChangeText={(email) => this.setstate({ email })}
-          value={this.state.email}
+          onChangeText={(email) => setEmail(email)}
+          value={email}
           label="Email"
           placeholder="user@gmail.com"
         />
       </CardSection>
-      <CardSection />
+      <CardSection>
+        <Input
+          secureTextEntry
+          placeholder="password"
+          label="Password"
+          value={password}
+          onChangeText={(password) => setPassword(password)}
+        />
+      </CardSection>
       <CardSection>
         <Button>Log In</Button>
       </CardSection>
