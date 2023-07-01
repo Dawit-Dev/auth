@@ -5,8 +5,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { Button, Card, CardSection, Input } from "./common";
-import { Text, StyleSheet } from 'react-native'
+import { Button, Card, CardSection, Input, Spinner } from "./common";
+import { Text, StyleSheet } from "react-native";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC2-Z7K-4ZEJ1E7EysXhjyN-dU1VTC_CIc",
@@ -27,18 +27,39 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onButtonPress = () => {
-    signInWithEmailAndPassword(auth, email, password).catch(() => {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          setError("Authentication Failed.");
-        })
-        .catch((error) => {
-          setError(error.message);
-        });
-    });
+    setLoading(true); // Set loading to true before the asynchronous operation
+    signInWithEmailAndPassword(auth, email, password)
+      .catch(() => {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then(() => {
+            setError("Authentication Failed.");
+          })
+          .catch((error) => {
+            setError(error.message);
+          })
+          .finally(() => {
+            setLoading(false); // Set loading to false after the operation is completed
+          });
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false after an error occurs
+      });
   };
+
+
+
+
+    
+    const renderButton = () => {
+      if (loading) {
+        return <Spinner size="small" />;
+      }
+      return <Button onPress={onButtonPress}>Log In</Button>;
+    };
+
 
   return (
     <Card>
@@ -59,8 +80,8 @@ const LoginForm = () => {
           onChangeText={(text) => setPassword(text)}
         />
       </CardSection>
-      <CardSection>
-        <Button onPress={onButtonPress}>Log In</Button>
+          <CardSection>
+              {renderButton()}
       </CardSection>
       {error ? <Text style={styles.errorTextStyle}>{error}</Text> : null}
     </Card>
@@ -68,12 +89,12 @@ const LoginForm = () => {
 };
 
 const styles = StyleSheet.create({
-    errorTextStyle: {
-        fontSize: 20,
-        margin: 10,
-        alignSelf: 'center',
-        color: 'red'
-    }
-})
+  errorTextStyle: {
+    fontSize: 20,
+    margin: 10,
+    alignSelf: "center",
+    color: "red",
+  },
+});
 
 export default LoginForm;
