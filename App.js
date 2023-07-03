@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { Button, Header } from "./src/components/common";
 import LoginForm from "./src/components/LoginForm";
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -31,9 +31,19 @@ const App = () => {
     }
   });
 
+  const handleLogOut = () => {
+    signOut(auth)
+      .then(() => {
+        setLoggedIn(false);
+      })
+      .catch((error) => {
+        console.log("Error signing out:", error);
+      });
+  };
+
   const renderContent = () => {
     if (loggedIn) {
-      return <Button>Log Out</Button>;
+      return <Button onPress={handleLogOut}>Log Out</Button>;
     }
     return <LoginForm auth={auth} />;
   };
@@ -48,5 +58,3 @@ const App = () => {
 };
 
 export default App;
- 
-
