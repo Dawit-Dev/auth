@@ -1,12 +1,13 @@
- import { StatusBar } from "expo-status-bar";
-import React from "react";
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
 import { View } from "react-native";
-import { Header } from "./src/components/common";
+import { Button, Header } from "./src/components/common";
 import LoginForm from "./src/components/LoginForm";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
   const firebaseConfig = {
     apiKey: "AIzaSyC2-Z7K-4ZEJ1E7EysXhjyN-dU1VTC_CIc",
     authDomain: "auth-cfecb.firebaseapp.com",
@@ -22,14 +23,30 @@ const App = () => {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  });
+
+  const renderContent = () => {
+    if (loggedIn) {
+      return <Button>Log Out</Button>;
+    }
+    return <LoginForm auth={auth} />;
+  };
+
   return (
     <View>
       <Header headerText="Authentication" />
-      <LoginForm auth={auth} />
+      {renderContent()}
       <StatusBar style="auto" />
     </View>
   );
 };
 
 export default App;
+ 
 
